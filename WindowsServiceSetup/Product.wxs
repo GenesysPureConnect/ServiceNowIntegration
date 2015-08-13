@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="ServiceNowConnector" Language="1033" Version="1.0.0.0" Manufacturer="Interactive Intelligence" UpgradeCode="48dc066c-97cc-4512-8fa3-52bbe195e075">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="ServiceNowConnector" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+
+    <UI>
+      <UIRef Id="WixUI_Mondo" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+
+    <WixVariable Id="WixUIBannerBmp" Value="banner.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="dialog.png" />
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+
+    <!--Add/Remove Programs Icon Image-->
+    <Icon Id="ininlogo.ico" SourceFile="ininlogo.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="ininlogo.ico" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="ServiceNowConnector" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">			
+			<Component Id="ProductComponent">
+				<!--<File Id="Insert dll name" Name="Insert dll name again" Source="Insert path to dll" Vital="yes" KeyPath="no" DiskId="1"/>-->
+				<File Id="ServiceNowConnector.exe" Name="ServiceNowConnector.exe" Source="..\bin\Release\ServiceNowConnector.exe" Vital="yes" KeyPath="yes" DiskId="1"/>
+        <File Id="ServiceNowConnector.pdb" Name="ServiceNowConnector.pdb" Source="..\bin\Release\ServiceNowConnector.pdb" Vital="yes" KeyPath="no" DiskId="1"/>
+        <File Id="ServiceNowConnector.exe.config" Name="ServiceNowConnector.exe.config" Source="..\bin\Release\ServiceNowConnector.exe.config" KeyPath="no" Vital="yes"  DiskId="1"/>
+				<ServiceInstall
+					Id="ServiceInstaller"
+					Type="ownProcess"
+					Vital="yes"
+					Name="ServiceNowConnector"
+					DisplayName="Service Now Connector Service"
+					Description="Connector between Interactive's IVR with Service-Now's ticketing system. "
+					Start="auto"
+					Account="LocalSystem"
+					ErrorControl="normal"
+					Interactive="no"
+              >
+				</ServiceInstall>
+				<ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="ServiceNowConnector" Wait="yes" />
+			</Component>
+
+		</ComponentGroup>
+	</Fragment>
+</Wix>
